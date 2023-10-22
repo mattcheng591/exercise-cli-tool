@@ -16,6 +16,7 @@ def main():
   puts(colored.red("-Select Help for more information"))
   puts(colored.red("----------------------------------------------------------------`-"))
   print("\n")
+
   selection = select()
   if selection == "Search an exercise":
     search()
@@ -39,6 +40,7 @@ def select():
     ],
     default="Search an exercise"
   ).execute()
+
   return selection
 
 def search():
@@ -69,6 +71,9 @@ def search():
       print("\n")
   else:
     puts(colored.blue(f"Error: {req.status_code} {req.text}"))
+  if len(res) == 0:
+    with indent(4):
+      puts(colored.magenta("Exercise was not found, please try again"))
 
 def help():
   """Displays more information about the options"""
