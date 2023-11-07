@@ -27,7 +27,7 @@ while True:
       for exercise in result:
           exercises.append(exercise)
 
-      num = random.randint(0, len(exercises))
+      num = random.randint(0, len(exercises) - 1)
       exercise_data = exercises[num]
 
       # Name of exercise sent back
