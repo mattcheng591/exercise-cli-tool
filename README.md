@@ -13,3 +13,5 @@ socket.bind("tcp://*:5555")
 socket.send_string("Random exercise is being generated.")
 4) To receive data from the microservice:
 socket.send_string(exercise_data.get("name"))
+
+![image](https://github.com/mattcheng591/exercise-cli-tool/assets/105122660/5725a93c-88f9-4fec-9ebd-36fe921cf39b)
