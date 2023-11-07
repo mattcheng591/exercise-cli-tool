@@ -7,11 +7,11 @@ Communication Contract:
 1) Install zmq with Python, dotenv, InquirerPy, clint
 2) Import time, zmq, requests, os, random, textwrap
 3) To request data from the microservice:
-context = zmq.Context()
-socket = context.socket(zmq.REP)
-socket.bind("tcp://*:5555")
-socket.send_string("Random exercise is being generated.")
+* context = zmq.Context()
+* socket = context.socket(zmq.REP)
+* socket.bind("tcp://*:5555")
+* socket.send_string("Random exercise is being generated.")
 4) To receive data from the microservice:
-socket.send_string(exercise_data.get("name"))
+* socket.send_string(exercise_data.get("name"))
 
 ![image](https://github.com/mattcheng591/exercise-cli-tool/assets/105122660/5725a93c-88f9-4fec-9ebd-36fe921cf39b)
