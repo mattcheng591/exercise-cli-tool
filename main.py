@@ -4,6 +4,7 @@ from InquirerPy.base.control import Choice
 import requests
 import os
 import textwrap
+import zmq
 from dotenv import load_dotenv, dotenv_values
 
 def main():
@@ -14,19 +15,22 @@ def main():
   puts(colored.red("-This CLI Tool can be used to get information about gym exercises"))
   puts(colored.red("-You can use your arrow keys and ENTER to select options"))
   puts(colored.red("-Select Help for more information"))
-  puts(colored.red("----------------------------------------------------------------`-"))
+  puts(colored.red("-----------------------------------------------------------------"))
   print("\n")
-
-  selection = select()
-  if selection == "Search an exercise":
-    search()
-  elif selection == "View list of exercises":
-    print("Choose to view exercises from these muscle groups")
-  elif selection == "Help":
-    help()
-  elif selection == None:
-    print("Quitting tool...")
-    quit()
+  while True:
+    selection = select()
+    if selection == "Search an exercise":
+      search()
+    elif selection == "View list of exercises":
+      print("Choose to view exercises from these muscle groups")
+    elif selection == "Generate a random powerlifting exercise":
+      with indent(4):
+        puts(colored.cyan(random_exercise()))
+    elif selection == "Help":
+      help()
+    elif selection == None:
+      print("Quitting tool...")
+      quit()
 
 def select():
   """Select options"""
@@ -35,13 +39,28 @@ def select():
     choices=[
       "Search an exercise",
       "View list of exercises",
+      "Generate a random powerlifting exercise",
       "Help",
       Choice(value=None, name="Quit"),
     ],
     default="Search an exercise"
   ).execute()
-
   return selection
+
+# My partner's microservice
+def random_exercise():
+  """Generate a random powerlifting exercise"""
+  context = zmq.Context()
+
+  socket = context.socket(zmq.REQ)
+  socket.connect("tcp://localhost:5555")
+
+  socket.send_string("Random exercise is being generated.")
+  name = "Name: " + socket.recv_string()
+  return name
+
+
+
 
 def search():
   """Search for an exercise by their name"""
@@ -71,9 +90,6 @@ def search():
       print("\n")
   else:
     puts(colored.blue(f"Error: {req.status_code} {req.text}"))
-  if len(res) == 0:
-    with indent(4):
-      puts(colored.magenta("Exercise was not found, please try again"))
 
 def help():
   """Displays more information about the options"""
@@ -83,6 +99,8 @@ def help():
     puts(colored.cyan("Using the search can be beneficial if you know what exercise you are looking for"))
     puts(colored.cyan("Viewing a list of exercises will bring you to another menu that will let you"))
     puts(colored.cyan("select a muscle group to view exercises from"))
+    puts(colored.cyan("When you generate a random powerlifting exercise, the name of a random powerlifting exercise will be returned."))
+    puts(colored.cyan("The user can then use the search function to get more details on the exercise."))
 
 if __name__ == "__main__":
   main()
