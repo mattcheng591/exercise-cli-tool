@@ -22,7 +22,7 @@ def main():
     if selection == "Search an exercise":
       search()
     elif selection == "View list of exercises":
-      print("Choose to view exercises from these muscle groups")
+      view()
     elif selection == "Generate a random powerlifting exercise":
       with indent(4):
         puts(colored.cyan(random_exercise()))
@@ -59,8 +59,123 @@ def random_exercise():
   name = "Name: " + socket.recv_string()
   return name
 
+def view():
+  """Browse different categories of exercises"""
+  selection = inquirer.select(
+    message="Select an option:",
+    choices=[
+      "Cardio",
+      "Strongman",
+      "Plyometrics",
+      "Powerlifting",
+    ],
+    default="Cardio"
+  ).execute()
 
+  if selection == "Cardio":
+    cardio()
+  elif selection == "Strongman":
+    strongman()
+  elif selection == "Plyometrics":
+    plyometrics()
+  elif selection == "Powerlifting":
+    powerlifting()
 
+def cardio():
+  req = requests.get("https://api.api-ninjas.com/v1/exercises?type=cardio", headers={'X-Api-Key': f'{os.getenv("KEY")}'})
+  if req.status_code == requests.codes.ok:
+    res = req.json()
+    for ex in res:
+      name = "Exercise Name: " + ex.get("name")
+      type = "Type: " + ex.get("type").capitalize()
+      muscle = "Muscle: " + ex.get("muscle").capitalize()
+      equipment = "Equipment: " + ex.get("equipment").capitalize()
+      difficulty = "Difficulty: " + ex.get("difficulty").capitalize()
+      instructions = "Instructions: " + ex.get("instructions").capitalize()
+      wrapped_instructions = textwrap.wrap(instructions, width=200, initial_indent=" " * 4, subsequent_indent=" " * 4)
+      with indent(4):
+        puts(colored.cyan(name))
+        puts(colored.cyan(type))
+        puts(colored.cyan(muscle))
+        puts(colored.cyan(equipment))
+        puts(colored.cyan(difficulty))
+      for line in wrapped_instructions:
+        puts(colored.cyan(line))
+      print("\n")
+  else:
+    puts(colored.blue(f"Error: {req.status_code} {req.text}"))
+
+def strongman():
+  req = requests.get("https://api.api-ninjas.com/v1/exercises?type=strongman", headers={'X-Api-Key': f'{os.getenv("KEY")}'})
+  if req.status_code == requests.codes.ok:
+    res = req.json()
+    for ex in res:
+      name = "Exercise Name: " + ex.get("name")
+      type = "Type: " + ex.get("type").capitalize()
+      muscle = "Muscle: " + ex.get("muscle").capitalize()
+      equipment = "Equipment: " + ex.get("equipment").capitalize()
+      difficulty = "Difficulty: " + ex.get("difficulty").capitalize()
+      instructions = "Instructions: " + ex.get("instructions").capitalize()
+      wrapped_instructions = textwrap.wrap(instructions, width=200, initial_indent=" " * 4, subsequent_indent=" " * 4)
+      with indent(4):
+        puts(colored.cyan(name))
+        puts(colored.cyan(type))
+        puts(colored.cyan(muscle))
+        puts(colored.cyan(equipment))
+        puts(colored.cyan(difficulty))
+      for line in wrapped_instructions:
+        puts(colored.cyan(line))
+      print("\n")
+  else:
+    puts(colored.blue(f"Error: {req.status_code} {req.text}"))
+
+def plyometrics():
+  req = requests.get("https://api.api-ninjas.com/v1/exercises?type=plyometrics", headers={'X-Api-Key': f'{os.getenv("KEY")}'})
+  if req.status_code == requests.codes.ok:
+    res = req.json()
+    for ex in res:
+      name = "Exercise Name: " + ex.get("name")
+      type = "Type: " + ex.get("type").capitalize()
+      muscle = "Muscle: " + ex.get("muscle").capitalize()
+      equipment = "Equipment: " + ex.get("equipment").capitalize()
+      difficulty = "Difficulty: " + ex.get("difficulty").capitalize()
+      instructions = "Instructions: " + ex.get("instructions").capitalize()
+      wrapped_instructions = textwrap.wrap(instructions, width=200, initial_indent=" " * 4, subsequent_indent=" " * 4)
+      with indent(4):
+        puts(colored.cyan(name))
+        puts(colored.cyan(type))
+        puts(colored.cyan(muscle))
+        puts(colored.cyan(equipment))
+        puts(colored.cyan(difficulty))
+      for line in wrapped_instructions:
+        puts(colored.cyan(line))
+      print("\n")
+  else:
+    puts(colored.blue(f"Error: {req.status_code} {req.text}"))
+
+def powerlifting():
+  req = requests.get("https://api.api-ninjas.com/v1/exercises?type=powerlifting", headers={'X-Api-Key': f'{os.getenv("KEY")}'})
+  if req.status_code == requests.codes.ok:
+    res = req.json()
+    for ex in res:
+      name = "Exercise Name: " + ex.get("name")
+      type = "Type: " + ex.get("type").capitalize()
+      muscle = "Muscle: " + ex.get("muscle").capitalize()
+      equipment = "Equipment: " + ex.get("equipment").capitalize()
+      difficulty = "Difficulty: " + ex.get("difficulty").capitalize()
+      instructions = "Instructions: " + ex.get("instructions").capitalize()
+      wrapped_instructions = textwrap.wrap(instructions, width=200, initial_indent=" " * 4, subsequent_indent=" " * 4)
+      with indent(4):
+        puts(colored.cyan(name))
+        puts(colored.cyan(type))
+        puts(colored.cyan(muscle))
+        puts(colored.cyan(equipment))
+        puts(colored.cyan(difficulty))
+      for line in wrapped_instructions:
+        puts(colored.cyan(line))
+      print("\n")
+  else:
+    puts(colored.blue(f"Error: {req.status_code} {req.text}"))
 
 def search():
   """Search for an exercise by their name"""
@@ -98,7 +213,7 @@ def help():
     puts(colored.cyan("If the name entered matches multiple exercises, it will return all matches"))
     puts(colored.cyan("Using the search can be beneficial if you know what exercise you are looking for"))
     puts(colored.cyan("Viewing a list of exercises will bring you to another menu that will let you"))
-    puts(colored.cyan("select a muscle group to view exercises from"))
+    puts(colored.cyan("select an exercise type to view exercises from"))
     puts(colored.cyan("When you generate a random powerlifting exercise, the name of a random powerlifting exercise will be returned."))
     puts(colored.cyan("The user can then use the search function to get more details on the exercise."))
 
